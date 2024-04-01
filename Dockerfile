@@ -2,10 +2,10 @@ FROM jenkins/jenkins:lts
 LABEL maintainer="out.quito@outlook.com"
 
 USER root
-RUN mkdir /var/log/jenkins \
-    && mkdir /var/cache/jenkins \
-    && chown -R jenkins:jenkins /var/log/jenkins \
-    && chown -R jenkins:jenkins /var/cache/jenkins
+RUN mkdir /var/log/jenkins
+RUN mkdir /var/cache/jenkins 
+RUN chown -R jenkins:jenkins /var/log/jenkins 
+RUN chown -R jenkins:jenkins /var/cache/jenkins
 USER jenkins
 
 ENV JAVA_OPTS="-Xmx8192m"
