@@ -1,0 +1,355 @@
+Running from: /usr/share/jenkins/jenkins.war
+webroot: EnvVars.masterEnvVars.get("JENKINS_HOME")
+Apr 01, 2024 4:07:25 PM Main deleteWinstoneTempContents
+WARNING: Failed to delete the temporary Winstone file /tmp/winstone/jenkins.war
+Apr 01, 2024 4:07:25 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Logging initialized @640ms
+Apr 01, 2024 4:07:25 PM winstone.Logger logInternal
+INFO: Beginning extraction from war file
+Apr 01, 2024 4:07:27 PM org.eclipse.jetty.util.log.JavaUtilLog warn
+WARNING: Empty contextPath
+Apr 01, 2024 4:07:27 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: jetty-9.2.z-SNAPSHOT
+Apr 01, 2024 4:07:28 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet
+Jenkins home directory: /var/jenkins_home found at: EnvVars.masterEnvVars.get("JENKINS_HOME")
+Apr 01, 2024 4:07:28 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started w.@6cbcf243{/,file:/var/jenkins_home/war/,AVAILABLE}{/var/jenkins_home/war}
+Apr 01, 2024 4:07:28 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started ServerConnector@9ed238c{HTTP/1.1}{0.0.0.0:8080}
+Apr 01, 2024 4:07:28 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started @3741ms
+Apr 01, 2024 4:07:28 PM winstone.Logger logInternal
+INFO: Winstone Servlet Engine v2.0 running: controlPort=disabled
+Apr 01, 2024 4:07:29 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started initialization
+Apr 01, 2024 4:07:29 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Listed all plugins
+Apr 01, 2024 4:07:31 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Prepared all plugins
+Apr 01, 2024 4:07:31 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started all plugins
+Apr 01, 2024 4:07:31 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Augmented all extensions
+Apr 01, 2024 4:07:32 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Loaded all jobs
+Apr 01, 2024 4:07:33 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Started Download metadata
+Apr 01, 2024 4:07:33 PM jenkins.util.groovy.GroovyHookScript execute
+INFO: Executing /var/jenkins_home/init.groovy.d/tcp-slave-agent-port.groovy
+Apr 01, 2024 4:07:33 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Completed initialization
+Apr 01, 2024 4:07:34 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@47c872ed: display name [Root WebApplicationContext]; startup date [Mon Apr 01 16:07:34 UTC 2024]; root of context hierarchy
+Apr 01, 2024 4:07:34 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@47c872ed]: org.springframework.beans.factory.support.DefaultListableBeanFactory@59bcf833
+Apr 01, 2024 4:07:34 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@59bcf833: defining beans [authenticationManager]; root of factory hierarchy
+Apr 01, 2024 4:07:34 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@558d7972: display name [Root WebApplicationContext]; startup date [Mon Apr 01 16:07:34 UTC 2024]; root of context hierarchy
+Apr 01, 2024 4:07:34 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@558d7972]: org.springframework.beans.factory.support.DefaultListableBeanFactory@778bba1c
+Apr 01, 2024 4:07:34 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@778bba1c: defining beans [filter,legacy]; root of factory hierarchy
+Apr 01, 2024 4:07:34 PM jenkins.install.SetupWizard init
+INFO: 
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+
+63cef92449b54906bc669422c492103b
+
+This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+--> setting agent port for jnlp
+--> setting agent port for jnlp... done
+Apr 01, 2024 4:07:53 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.PluginManager.doCheckUpdatesServer(PluginManager.java:1632)<br>	at jenkins.model.DownloadSettings$DailyCheck.execute(DownloadSettings.java:131)<br>	at hudson.model.AsyncPeriodicWork$1.run(AsyncPeriodicWork.java:101)<br>	at java.lang.Thread.run(Thread.java:748)<br></pre>
+Apr 01, 2024 4:07:53 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Finished Download metadata. 20,083 ms
+Apr 01, 2024 4:07:54 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.model.UpdateCenter.updateDefaultSite(UpdateCenter.java:2194)<br>	at jenkins.install.SetupWizard.init(SetupWizard.java:174)<br>	at jenkins.install.InstallState$3.initializeState(InstallState.java:105)<br>	at jenkins.model.Jenkins.setInstallState(Jenkins.java:1062)<br>	at jenkins.install.InstallUtil.proceedToNextStateFrom(InstallUtil.java:96)<br>	at jenkins.model.Jenkins.&lt;init&gt;(Jenkins.java:952)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:86)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:82)<br>	at hudson.WebAppMain$3.run(WebAppMain.java:235)<br></pre>
+Apr 01, 2024 4:07:54 PM hudson.WebAppMain$3 run
+INFO: Jenkins is fully up and running
+Running from: /usr/share/jenkins/jenkins.war
+webroot: EnvVars.masterEnvVars.get("JENKINS_HOME")
+Apr 01, 2024 4:10:29 PM Main deleteWinstoneTempContents
+WARNING: Failed to delete the temporary Winstone file /tmp/winstone/jenkins.war
+Apr 01, 2024 4:10:29 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Logging initialized @419ms
+Apr 01, 2024 4:10:29 PM winstone.Logger logInternal
+INFO: Beginning extraction from war file
+Apr 01, 2024 4:10:31 PM org.eclipse.jetty.util.log.JavaUtilLog warn
+WARNING: Empty contextPath
+Apr 01, 2024 4:10:31 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: jetty-9.2.z-SNAPSHOT
+Apr 01, 2024 4:10:32 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet
+Jenkins home directory: /var/jenkins_home found at: EnvVars.masterEnvVars.get("JENKINS_HOME")
+Apr 01, 2024 4:10:32 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started w.@6cbcf243{/,file:/var/jenkins_home/war/,AVAILABLE}{/var/jenkins_home/war}
+Apr 01, 2024 4:10:32 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started ServerConnector@9ed238c{HTTP/1.1}{0.0.0.0:8080}
+Apr 01, 2024 4:10:32 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started @3438ms
+Apr 01, 2024 4:10:32 PM winstone.Logger logInternal
+INFO: Winstone Servlet Engine v2.0 running: controlPort=disabled
+Apr 01, 2024 4:10:33 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started initialization
+Apr 01, 2024 4:10:33 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Listed all plugins
+Apr 01, 2024 4:10:34 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Prepared all plugins
+Apr 01, 2024 4:10:34 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started all plugins
+Apr 01, 2024 4:10:34 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Augmented all extensions
+Apr 01, 2024 4:10:36 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Loaded all jobs
+Apr 01, 2024 4:10:36 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Started Download metadata
+Apr 01, 2024 4:10:36 PM jenkins.util.groovy.GroovyHookScript execute
+INFO: Executing /var/jenkins_home/init.groovy.d/tcp-slave-agent-port.groovy
+Apr 01, 2024 4:10:36 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Completed initialization
+Apr 01, 2024 4:10:37 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@497c3e9d: display name [Root WebApplicationContext]; startup date [Mon Apr 01 16:10:37 UTC 2024]; root of context hierarchy
+Apr 01, 2024 4:10:37 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@497c3e9d]: org.springframework.beans.factory.support.DefaultListableBeanFactory@1236d915
+Apr 01, 2024 4:10:37 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@1236d915: defining beans [authenticationManager]; root of factory hierarchy
+Apr 01, 2024 4:10:37 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@6bef4f06: display name [Root WebApplicationContext]; startup date [Mon Apr 01 16:10:37 UTC 2024]; root of context hierarchy
+Apr 01, 2024 4:10:37 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@6bef4f06]: org.springframework.beans.factory.support.DefaultListableBeanFactory@61a424ca
+Apr 01, 2024 4:10:37 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@61a424ca: defining beans [filter,legacy]; root of factory hierarchy
+Apr 01, 2024 4:10:37 PM jenkins.install.SetupWizard init
+INFO: 
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+
+f9a8e6c335d6482d9979cd42f01a20c1
+
+This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+--> setting agent port for jnlp
+--> setting agent port for jnlp... done
+Apr 01, 2024 4:10:57 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.PluginManager.doCheckUpdatesServer(PluginManager.java:1632)<br>	at jenkins.model.DownloadSettings$DailyCheck.execute(DownloadSettings.java:131)<br>	at hudson.model.AsyncPeriodicWork$1.run(AsyncPeriodicWork.java:101)<br>	at java.lang.Thread.run(Thread.java:748)<br></pre>
+Apr 01, 2024 4:10:57 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.model.UpdateCenter.updateDefaultSite(UpdateCenter.java:2194)<br>	at jenkins.install.SetupWizard.init(SetupWizard.java:174)<br>	at jenkins.install.InstallState$3.initializeState(InstallState.java:105)<br>	at jenkins.model.Jenkins.setInstallState(Jenkins.java:1062)<br>	at jenkins.install.InstallUtil.proceedToNextStateFrom(InstallUtil.java:96)<br>	at jenkins.model.Jenkins.&lt;init&gt;(Jenkins.java:952)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:86)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:82)<br>	at hudson.WebAppMain$3.run(WebAppMain.java:235)<br></pre>
+Apr 01, 2024 4:10:57 PM hudson.WebAppMain$3 run
+INFO: Jenkins is fully up and running
+Apr 01, 2024 4:10:57 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Finished Download metadata. 21,325 ms
+Running from: /usr/share/jenkins/jenkins.war
+Apr 01, 2024 4:31:42 PM Main deleteWinstoneTempContents
+WARNING: Failed to delete the temporary Winstone file /tmp/winstone/jenkins.war
+Apr 01, 2024 4:31:43 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Logging initialized @680ms
+Apr 01, 2024 4:31:43 PM winstone.Logger logInternal
+INFO: Beginning extraction from war file
+Apr 01, 2024 4:31:43 PM winstone.Logger logInternal
+INFO: Winstone shutdown successfully
+Apr 01, 2024 4:31:43 PM winstone.Logger logInternal
+SEVERE: Container startup failed
+java.io.FileNotFoundException: /var/cache/jenkins/war/META-INF/MANIFEST.MF (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at winstone.HostConfiguration.getWebRoot(HostConfiguration.java:280)
+	at winstone.HostConfiguration.<init>(HostConfiguration.java:83)
+	at winstone.HostGroup.initHost(HostGroup.java:66)
+	at winstone.HostGroup.<init>(HostGroup.java:45)
+	at winstone.Launcher.<init>(Launcher.java:144)
+	at winstone.Launcher.main(Launcher.java:352)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at Main._main(Main.java:293)
+	at Main.main(Main.java:132)
+
+Running from: /usr/share/jenkins/jenkins.war
+Apr 01, 2024 4:47:11 PM Main deleteWinstoneTempContents
+WARNING: Failed to delete the temporary Winstone file /tmp/winstone/jenkins.war
+Apr 01, 2024 4:47:11 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Logging initialized @731ms
+Apr 01, 2024 4:47:11 PM winstone.Logger logInternal
+INFO: Beginning extraction from war file
+Apr 01, 2024 4:47:13 PM org.eclipse.jetty.util.log.JavaUtilLog warn
+WARNING: Empty contextPath
+Apr 01, 2024 4:47:13 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: jetty-9.2.z-SNAPSHOT
+Apr 01, 2024 4:47:14 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet
+Jenkins home directory: /var/jenkins_home found at: EnvVars.masterEnvVars.get("JENKINS_HOME")
+Apr 01, 2024 4:47:15 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started w.@305f7627{/,file:/var/cache/jenkins/war/,AVAILABLE}{/var/cache/jenkins/war}
+Apr 01, 2024 4:47:15 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started ServerConnector@15c25153{HTTP/1.1}{0.0.0.0:8080}
+Apr 01, 2024 4:47:15 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started @4389ms
+Apr 01, 2024 4:47:15 PM winstone.Logger logInternal
+INFO: Winstone Servlet Engine v2.0 running: controlPort=disabled
+Apr 01, 2024 4:47:16 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started initialization
+Apr 01, 2024 4:47:16 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Listed all plugins
+Apr 01, 2024 4:47:18 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Prepared all plugins
+Apr 01, 2024 4:47:18 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started all plugins
+Apr 01, 2024 4:47:18 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Augmented all extensions
+Apr 01, 2024 4:47:20 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Loaded all jobs
+Apr 01, 2024 4:47:20 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Started Download metadata
+Apr 01, 2024 4:47:21 PM jenkins.util.groovy.GroovyHookScript execute
+INFO: Executing /var/jenkins_home/init.groovy.d/tcp-slave-agent-port.groovy
+Apr 01, 2024 4:47:21 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Completed initialization
+Apr 01, 2024 4:47:21 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@10531554: display name [Root WebApplicationContext]; startup date [Mon Apr 01 16:47:21 UTC 2024]; root of context hierarchy
+Apr 01, 2024 4:47:21 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@10531554]: org.springframework.beans.factory.support.DefaultListableBeanFactory@e8121b1
+Apr 01, 2024 4:47:21 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@e8121b1: defining beans [authenticationManager]; root of factory hierarchy
+Apr 01, 2024 4:47:22 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@67e8403a: display name [Root WebApplicationContext]; startup date [Mon Apr 01 16:47:22 UTC 2024]; root of context hierarchy
+Apr 01, 2024 4:47:22 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@67e8403a]: org.springframework.beans.factory.support.DefaultListableBeanFactory@61014903
+Apr 01, 2024 4:47:22 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@61014903: defining beans [filter,legacy]; root of factory hierarchy
+Apr 01, 2024 4:47:22 PM jenkins.install.SetupWizard init
+INFO: 
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+
+6fd956b31a3f48d1a5da4966becb2684
+
+This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+--> setting agent port for jnlp
+--> setting agent port for jnlp... done
+Apr 01, 2024 4:47:45 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.PluginManager.doCheckUpdatesServer(PluginManager.java:1632)<br>	at jenkins.model.DownloadSettings$DailyCheck.execute(DownloadSettings.java:131)<br>	at hudson.model.AsyncPeriodicWork$1.run(AsyncPeriodicWork.java:101)<br>	at java.lang.Thread.run(Thread.java:748)<br></pre>
+Apr 01, 2024 4:47:45 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Finished Download metadata. 25,338 ms
+Apr 01, 2024 4:47:47 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.model.UpdateCenter.updateDefaultSite(UpdateCenter.java:2194)<br>	at jenkins.install.SetupWizard.init(SetupWizard.java:174)<br>	at jenkins.install.InstallState$3.initializeState(InstallState.java:105)<br>	at jenkins.model.Jenkins.setInstallState(Jenkins.java:1062)<br>	at jenkins.install.InstallUtil.proceedToNextStateFrom(InstallUtil.java:96)<br>	at jenkins.model.Jenkins.&lt;init&gt;(Jenkins.java:952)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:86)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:82)<br>	at hudson.WebAppMain$3.run(WebAppMain.java:235)<br></pre>
+Apr 01, 2024 4:47:48 PM hudson.WebAppMain$3 run
+INFO: Jenkins is fully up and running
+Apr 01, 2024 4:50:23 PM winstone.Logger logInternal
+INFO: JVM is terminating. Shutting down Winstone
+Running from: /usr/share/jenkins/jenkins.war
+Apr 01, 2024 5:01:19 PM Main deleteWinstoneTempContents
+WARNING: Failed to delete the temporary Winstone file /tmp/winstone/jenkins.war
+Apr 01, 2024 5:01:19 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Logging initialized @635ms
+Apr 01, 2024 5:01:19 PM winstone.Logger logInternal
+INFO: Beginning extraction from war file
+Apr 01, 2024 5:01:20 PM org.eclipse.jetty.util.log.JavaUtilLog warn
+WARNING: Empty contextPath
+Apr 01, 2024 5:01:20 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: jetty-9.2.z-SNAPSHOT
+Apr 01, 2024 5:01:21 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet
+Jenkins home directory: /var/jenkins_home found at: EnvVars.masterEnvVars.get("JENKINS_HOME")
+Apr 01, 2024 5:01:22 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started w.@305f7627{/,file:/var/cache/jenkins/war/,AVAILABLE}{/var/cache/jenkins/war}
+Apr 01, 2024 5:01:22 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started ServerConnector@15c25153{HTTP/1.1}{0.0.0.0:8080}
+Apr 01, 2024 5:01:22 PM org.eclipse.jetty.util.log.JavaUtilLog info
+INFO: Started @3642ms
+Apr 01, 2024 5:01:22 PM winstone.Logger logInternal
+INFO: Winstone Servlet Engine v2.0 running: controlPort=disabled
+Apr 01, 2024 5:01:22 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started initialization
+Apr 01, 2024 5:01:22 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Listed all plugins
+Apr 01, 2024 5:01:24 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Prepared all plugins
+Apr 01, 2024 5:01:24 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Started all plugins
+Apr 01, 2024 5:01:24 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Augmented all extensions
+Apr 01, 2024 5:01:25 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Loaded all jobs
+Apr 01, 2024 5:01:25 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Started Download metadata
+Apr 01, 2024 5:01:26 PM jenkins.util.groovy.GroovyHookScript execute
+INFO: Executing /var/jenkins_home/init.groovy.d/tcp-slave-agent-port.groovy
+Apr 01, 2024 5:01:26 PM jenkins.InitReactorRunner$1 onAttained
+INFO: Completed initialization
+Apr 01, 2024 5:01:26 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@229088fb: display name [Root WebApplicationContext]; startup date [Mon Apr 01 17:01:26 UTC 2024]; root of context hierarchy
+Apr 01, 2024 5:01:26 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@229088fb]: org.springframework.beans.factory.support.DefaultListableBeanFactory@5056f7b7
+Apr 01, 2024 5:01:26 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@5056f7b7: defining beans [authenticationManager]; root of factory hierarchy
+Apr 01, 2024 5:01:26 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@5b4a2a5d: display name [Root WebApplicationContext]; startup date [Mon Apr 01 17:01:26 UTC 2024]; root of context hierarchy
+Apr 01, 2024 5:01:26 PM org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory
+INFO: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@5b4a2a5d]: org.springframework.beans.factory.support.DefaultListableBeanFactory@6755582e
+Apr 01, 2024 5:01:26 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@6755582e: defining beans [filter,legacy]; root of factory hierarchy
+Apr 01, 2024 5:01:27 PM jenkins.install.SetupWizard init
+INFO: 
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+
+dfffb823f2a841dcbbcab34c27d8acaf
+
+This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+
+*************************************************************
+*************************************************************
+*************************************************************
+
+--> setting agent port for jnlp
+--> setting agent port for jnlp... done
+Apr 01, 2024 5:01:46 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.PluginManager.doCheckUpdatesServer(PluginManager.java:1632)<br>	at jenkins.model.DownloadSettings$DailyCheck.execute(DownloadSettings.java:131)<br>	at hudson.model.AsyncPeriodicWork$1.run(AsyncPeriodicWork.java:101)<br>	at java.lang.Thread.run(Thread.java:748)<br></pre>
+Apr 01, 2024 5:01:46 PM hudson.model.AsyncPeriodicWork$1 run
+INFO: Finished Download metadata. 20,465 ms
+Apr 01, 2024 5:01:46 PM hudson.model.UpdateSite updateData
+SEVERE: ERROR: Signature verification failed in update site &#039;default&#039; <a href='#' class='showDetails'>(show details)</a><pre style='display:none'>java.security.SignatureException: Signature length not correct: got 512 but was expecting 256<br>	at sun.security.rsa.RSASignature.engineVerify(RSASignature.java:189)<br>	at java.security.Signature$Delegate.engineVerify(Signature.java:1219)<br>	at java.security.Signature.verify(Signature.java:652)<br>	at sun.security.x509.X509CertImpl.verify(X509CertImpl.java:444)<br>	at sun.security.provider.certpath.BasicChecker.verifySignature(BasicChecker.java:166)<br>	at sun.security.provider.certpath.BasicChecker.check(BasicChecker.java:147)<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)<br>Caused: java.security.cert.CertPathValidatorException: signature check failed<br>	at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:135)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:223)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)<br>	at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)<br>	at java.security.cert.CertPathValidator.validate(CertPathValidator.java:292)<br>	at org.jvnet.hudson.crypto.CertificateUtil.validatePath(CertificateUtil.java:93)<br>	at jenkins.util.JSONSignatureValidator.verifySignature(JSONSignatureValidator.java:78)<br>	at hudson.model.UpdateSite.verifySignature(UpdateSite.java:254)<br>	at hudson.model.UpdateSite.updateData(UpdateSite.java:219)<br>	at hudson.model.UpdateSite.updateDirectlyNow(UpdateSite.java:190)<br>	at hudson.model.UpdateCenter.updateDefaultSite(UpdateCenter.java:2194)<br>	at jenkins.install.SetupWizard.init(SetupWizard.java:174)<br>	at jenkins.install.InstallState$3.initializeState(InstallState.java:105)<br>	at jenkins.model.Jenkins.setInstallState(Jenkins.java:1062)<br>	at jenkins.install.InstallUtil.proceedToNextStateFrom(InstallUtil.java:96)<br>	at jenkins.model.Jenkins.&lt;init&gt;(Jenkins.java:952)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:86)<br>	at hudson.model.Hudson.&lt;init&gt;(Hudson.java:82)<br>	at hudson.WebAppMain$3.run(WebAppMain.java:235)<br></pre>
+Apr 01, 2024 5:01:46 PM hudson.WebAppMain$3 run
+INFO: Jenkins is fully up and running
+Apr 01, 2024 5:17:23 PM winstone.Logger logInternal
+INFO: JVM is terminating. Shutting down Winstone
