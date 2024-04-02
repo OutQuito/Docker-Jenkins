@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.440.2-jdk17
+FROM jenkins/jenkins:lts-jdk17
 LABEL maintainer="out.quito@outlook.com"
 
 USER root
