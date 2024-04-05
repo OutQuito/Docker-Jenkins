@@ -3,7 +3,7 @@ LABEL maintainer=”out.quito@outlook.com”
 
 RUN yum -y update; yum clean all
 RUN yum -y install http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm; yum -y makecache
-RUN yum -y install nginx-1.32.1
+RUN yum -y install nginx
 RUN rm /etc/nginx/conf.d/default.conf
 
 COPY conf/jenkins.conf /etc/nginx/conf.d/jenkins.conf
