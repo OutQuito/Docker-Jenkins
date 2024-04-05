@@ -134,43 +134,49 @@ https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 1. Щоб NGINX не запускався як демон:
 
-    daemon off;
+    daemon off
+    
     Ми робимо це тому, що за замовчуванням під час виклику nginx у командному рядку NGINX запускається як фоновий демон. Це повертає вихід 0, який змушує Docker вважати, що процес зупинено, тому він вимикає контейнер. Ви побачите, що це часто трапляється з програмами, не призначеними для роботи в контейнерах. На щастя для NGINX, ця проста зміна вирішує проблему без складного обхідного шляху.
 
 2. Збільшення кількості робітників NGINX до 2:
 
-    worker_processes 2;
+    worker_processes 2
+
     Це те, що я роблю з кожним налаштованим NGINX. Ви можете залишити це на 1, якщо хочете. Це дійсно варіант «настроїти, як вважаєте за потрібне». Налаштування NGINX — це окрема тема для публікації. Я не можу сказати вам, що вам підходить. Дуже грубо кажучи, це скільки окремих процесів NGINX у вас є. Кількість ЦП, яку ви виділите, є хорошим орієнтиром. Натовпи спеціалістів NGINX скажуть, що це складніше. Звичайно, всередині контейнера Docker ви можете дискутувати, що тут робити.
 
 3. Налаштування події:
 
-    use epoll;
-    accept_mutex off;
+    use epoll
+    accept_mutex off
+
     Увімкнення epolling є зручним механізмом налаштування для використання більш ефективних моделей обробки з’єднань. Ми вимикаємо accept_mutex для швидкості, тому що ми не заперечуємо про втрату ресурсів при низькій кількості запитів на з’єднання.
 
 4. Налаштування заголовків проксі:
 
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Real-IP $remote_addr
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+
     Це друге налаштування (після вимкнення демона), яке є обов’язковим для проксі-сервера Jenkins. Це встановлює заголовки так, щоб Дженкінс міг правильно інтерпретувати запити, що допомагає усунути деякі попередження про неправильно встановлені заголовки.
 
 5. Клієнтські розміри:
 
-    client_max_body_size 300м;
-    client_body_buffer_size 128k;
+    client_max_body_size 300м
+    client_body_buffer_size 128k
+
     Вам це може знадобитися, а може й не знадобитися. Слід визнати, що 300 Мбайт — це великий розмір тіла. Однак у нас є користувачі, які завантажують файли на наш сервер Jenkins — деякі з них є просто плагінами HPI, а інші — справжніми файлами. Ми встановили це, щоб допомогти їм.
 
 6. GZIP на:
 
-    gzip on;
-    gzip_http_version 1.0;
-    gzip_comp_level 6;
-    gzip_min_length 0;
-    gzip_buffers 16 8k;
-    gzip_proxied any;
-    gzip_types text/plain text/css text/xml text/javascript application/xml application/xml+rss application/javascript application/json;
-    gzip_disable "MSIE [1-6]\.";
-    gzip_vary on;
+    gzip on
+    gzip_http_version 1.0
+    gzip_comp_level 6
+    gzip_min_length 0
+    gzip_buffers 16 8k
+    gzip_proxied any
+    gzip_types text/plain text/css text/xml text/javascript application/xml application/xml+rss application/javascript application/json
+    gzip_disable "MSIE [1-6]\."
+    gzip_vary on
+
     Тут ми вмикаємо стиснення gzip для підвищення швидкості.
 
 І це все! Збережіть цей файл і переконайтеся, що він у (в моєму випадку це /home/komarov/Projects/DockerProjects/Jenkins/Section-IV/jenkins-nginx/conf/nginx.conf) conf/nginx.conf там, де його очікує Dockerfile. Наступним кроком буде додавання конкретної конфігурації сайту для Jenkins. 
