@@ -138,14 +138,23 @@
 2. Dockerfile ARG (аргументи часу збірки) налаштовано для:
 
     1.user
+
     2.group
+
     3.uid
+
     4.gid
+
     5.http_port
+
     6.agent_port
+
     7.TINI_VERSION
+
     8.JENKINS_VERSION
+
     9.JENKINS_SHA
+
     10.JENKINS_URL
 
 3. Зображення використовує Tini , щоб допомогти керувати будь-якими процесами зомбі, що є цікавим доповненням. Ми збережемо це, оскільки для Jenkins необхідний підпроцес.
@@ -351,12 +360,17 @@ FROM buildpack-deps:stretch-curl
 
 3. Цей Dockerfile короткий і приємний. Ми бачимо ще один файл Docker у ланцюжку залежностей під назвою buildpack-deps:stretch-curl. Але крім цього, цей Dockerfile лише встановлює шість речей.
 
-    1. bzr
-    2. git
-    3. mercurial
-    4. openssh-client
-    5. subversion
-    6. procps
+    1.bzr
+
+    2.git
+
+    3.mercurial
+
+    4.openssh-client
+
+    5.subversion
+
+    6.procps
 
 Це має сенс, оскільки він виставляється як образ SCM. Це ще одна можливість зважити, чи хочете ви повторити цю конкретну поведінку чи ні. По-перше, образ Cloudbees Jenkins уже інсталює Git. Якщо вам не потрібні базар, mercurial або subversion або ви не використовуєте їх, можливо, вам не потрібно їх встановлювати, і ви можете заощадити місце у своєму образі. Для повноти, ось весь Dockerfile:
 
