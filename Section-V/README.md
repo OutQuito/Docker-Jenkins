@@ -173,13 +173,13 @@
 
 1. Введіть openjdk у вікно пошуку Dockerhub (переконайтеся, що ви перебуваєте на головній сторінці Dockerhub, а не просто шукаєте в репозиторії Jenkins).
 
-# =============== ВІДСТУП ===============
+# =============== -1- ===============
 
 #На момент читання статьї (06.04.24) тег openjbk занадто сильно змінився, вподальшому потрібно враховувати всі залежності які змінили версії своїх публікаций.
 
     23-ea-17-jdk-oraclelinux9, 23-ea-17-oraclelinux9, 23-ea-jdk-oraclelinux9, 23-ea-oraclelinux9, 23-jdk-oraclelinux9, 23-oraclelinux9, 23-ea-17-jdk-oracle, 23-ea-17-oracle, 23-ea-jdk-oracle, 23-ea-oracle, 23-jdk-oracle, 23-oracle
 
-# =============== КІНЕЦЬ ===============
+# =============== -1- ===============
 
 2. openjdk повертається як перше сховище. Натисніть на нього. 
 
@@ -278,7 +278,7 @@
 
 2. stretch-scm є записом, розташованим далеко в списку підтримуваних тегів. Натисніть посилання, щоб знайти його Dockerfile
 
-# =============== ВІДСТУП ===============
+# =============== -2- ===============
 
 #На момент читання статьї (06.04.24) в тегах stretch-scm незнайдений. Якщо stretch-scm був замінений чимось новим, ймовірно, він був оновлений на більш сучасний базовий образ, наприклад, buster-scm (якщо йдеться про Debian), або можливо був використаний інший підхід для роботи з репозиторіями. buster-scm у списку тегів є, сподіваюсь що це він.
     
@@ -356,7 +356,7 @@ FROM buildpack-deps:stretch-curl
 
 В іншому випадку обидва Dockerfile роблять схожі речі: встановлюють зазначені пакунки за допомогою apt-get install, а потім очищають кеш apt для зменшення розміру образу.
 
-# =============== КІНЕЦЬ ===============
+# =============== -2- ===============
 
 3. Цей Dockerfile короткий і приємний. Ми бачимо ще один файл Docker у ланцюжку залежностей під назвою buildpack-deps:stretch-curl. Але крім цього, цей Dockerfile лише встановлює шість речей.
 
@@ -415,7 +415,7 @@ FROM buildpack-deps:stretch-curl
     jenkins/jenkins:1.112           jenkins/jenkins:lts
     jenkins-master (our image)      jenkins-master (our image)
 
-# =============== ВІДСТУП ===============
+# =============== -3- ===============
 
 #Сподіваюсь що образ з використанням теоретичної зборки, враховуючи оновлені версії на даний час, будут працювати.
 
@@ -426,7 +426,7 @@ FROM buildpack-deps:stretch-curl
     jenkins/jenkins:lts
     jenkins-master (our image)
 
-# =============== КІНЕЦЬ ===============
+# =============== -3- ===============
 
 Не забувайте: ми обернули образ Дженкінса нашим власним файлом Dockerfile у попередніх уроках, тому нам потрібно пам’ятати це для наступного кроку, а саме створення власного файлу Dockerfile. 
 
@@ -497,7 +497,7 @@ FROM buildpack-deps:stretch-curl
 
     docker build jenkins-master/
 
-# =============== ВІДСТУП ===============
+# =============== -4- ===============
 
 #ПОМИЛКА №1
 
@@ -723,4 +723,221 @@ FROM buildpack-deps:stretch-curl
 
 У цьому Dockerfile я видалив змінні JAVA_VERSION,  JAVA_DEBIAN_VERSION і CA_CERTIFICATES_JAVA_VERSION, оскільки вони більше не потрібні. Просто встановлюєте пакунки openjdk-11-jdk та ca-certificates-java без вказування конкретних версій, і Docker вибере найновіші версії з репозиторіїв Debian Buster. 
 
-# =============== КІНЕЦЬ ===============
+# =============== -4- ===============
+
+Ми просто перевіряємо, чи все правильно встановлюється, тому це зображення можна викинути. Можливо, ви отримаєте повідомлення про помилку про зниклого користувача Jenkins – це нормально. Оскільки ми змінили базовий образ на ОС Debian, ми видалили (наразі) образ Jenkins, який створював цього користувача. 
+
+Треба багато пройти, тому я буду робити крок за кроком. Спочатку давайте налаштуємо всі наші аргументи збірки та будь-які змінні середовища, які ми можемо. Ми також можемо зберегти поведінку аргументу збірки з образу Cloudbees, оскільки це може бути зручно, якщо ми хочемо використовувати його. Після встановлення та налаштування сертифікатів apt-get додайте такі рядки: 
+
+    ARG user=jenkins
+    ARG group=jenkins
+    ARG uid=1000
+    ARG gid=1000
+    ARG http_port=8080
+    ARG agent_port=50000
+    ARG JENKINS_VERSION=2.112
+    ARG TINI_VERSION=v0.17.0
+
+    # jenkins.war checksum, download will be validated using it
+    ARG JENKINS_SHA=085f597edeb0d49d54d7653f3742ba31ed72b8a1a2b053d2eb23fd806c6a5393
+
+    # Can be used to customize where jenkins.war get downloaded from
+    ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
+
+    ENV JENKINS_VERSION ${JENKINS_VERSION}
+    ENV JENKINS_HOME /var/jenkins_home
+    ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
+    ENV JENKINS_UC https://updates.jenkins.io
+    ENV JENKINS_UC_EXPERIMENTAL=https://updates.jenkins.io/experimental
+    ENV JAVA_OPTS="-Xmx8192m"
+    ENV JENKINS_OPTS="--handlerCountMax=300 --logfile=/var/log/jenkins/jenkins.log  --webroot=/var/cache/jenkins/war"
+    ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
+
+# =============== -5- ===============
+
+#Я враховував всі зміни версій на теперешній час, звичайно будуть помилки, но як кажуть "Вирішуємо помилки по мірі їх надходження":
+
+    ARG user=jenkins
+    ARG group=jenkins
+    ARG uid=1000
+    ARG gid=1000
+    ARG http_port=8080
+    ARG agent_port=50000
+    ARG JENKINS_VERSION=2.440.2
+    ARG TINI_VERSION=v0.19.0
+    ARG JENKINS_SHA=8126628e9e2f8ee2f807d489ec0a6e37fc9f5d6ba84fa8f3718e7f3e2a27312e
+    ARG JENKINS_URL=https://get.jenkins.io/war-stable/2.440.2/jenkins.war
+
+    ENV JENKINS_VERSION ${JENKINS_VERSION}
+    ENV JENKINS_HOME /var/jenkins_home
+    ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
+    ENV JENKINS_UC https://updates.jenkins.io
+    ENV JENKINS_UC_EXPERIMENTAL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
+    ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
+
+# =============== -5- ===============
+
+Це досить великий список аргументів і змінних середовища. Я зібрав усе це разом, прочитавши Cloudbees Jenkins Dockerfile. Мені подобається мати якомога більше таких файлів в одному місці в моїх файлах Docker. Основні речі, на які варто звернути увагу: 
+
+
+    Версія jenkins контролюється аргументом під назвою JENKINS_VERSION, а його SHA відповідності — JENKINS_SHA.
+
+    Змінити версію Jenkins можна за допомогою редагування Dockerfile і перебудови або передачі параметра аргументу build.
+
+    Я змінив аргумент JENKINS_VERSION, щоб мати значення за замовчуванням (порівняно з оригіналом Cloudbees), і я оновив JENKINS_SHA, щоб відповідати.
+
+    Щоб знайти доступні версії та SHA для файлів Jenkins WAR, ви можете перейти тут: http://mirrors.jenkins.io/war/
+
+    Ви побачите, що я включив змінні середовища, такі як JAVA_OPTS і JENKINS_OPTS з наших попередніх файлів тут.
+
+Далі ми повинні встановити Tini. Цікавий факт: Docker має вбудовану підтримку Tini, але для цього потрібно ввімкнути параметр командного рядка: --init. Однак служби Docker і, отже, Docker-compose НЕ підтримують його. Існують обхідні шляхи, але для безпеки я пропоную встановити його так само, як Cloudbees. Якщо ви хочете прочитати більше про це, перегляньте цю проблему github . Зауважте, що я встановлюю Tini дещо інакше, ніж Cloudbees, частково, щоб отримати останню версію, а частково, щоб пропустити перевірку ключа GPG. За бажанням ви можете знову додати перевірку ключа GPG. Повний посібник зі встановлення Tini доступний на github Tini тут . Додайте наступні рядки до вашого Dockerfile відразу після параметрів ENV:
+
+    # Use tini as subreaper in Docker container to adopt zombie processes
+    RUN curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture) -o /sbin/tini \
+    && chmod +x /sbin/tini
+
+Ви помітите, що версія походить зі списку аргументів, який я вам доручив додати раніше.
+
+Далі я розмістив три записи, необхідні для встановлення Jenkins. Це створює самого користувача Jenkins, створює монтування тому та налаштовує каталог init. 
+
+    # Jenkins is run with user `jenkins`, uid = 1000
+    # If you bind mount a volume from the host or a data container,
+    # ensure you use the same uid
+    RUN groupadd -g ${gid} ${group} \
+    && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+
+    # Jenkins home directory is a volume, so configuration and build history
+    # can be persisted and survive image upgrades
+    VOLUME /var/jenkins_home
+
+    # `/usr/share/jenkins/ref/` contains all reference configuration we want
+    # to set on a fresh new installation. Use it to bundle additional plugins
+    # or config file with your custom jenkins Docker image.
+    RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
+
+З ними ми можемо запустити команду CURL, щоб отримати потрібний файл jenkins.war. Зауважте, що тут використовується змінна аргументу збірки JENKINS_VERSION, тому, якщо ви захочете змінити це в майбутньому, змініть аргумент збірки за замовчуванням або передайте версію, яку ви хочете використовувати (і відповідність SHA), параметру --build-arg у « збірка докера». 
+
+    #Install Jenkins
+    RUN curl -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
+    && echo "${JENKINS_SHA}  /usr/share/jenkins/jenkins.war" | sha256sum -c -
+
+Далі ми встановлюємо всі права доступу до каталогу та користувача. Вони перенесені з образу jenkins-master, який ми створили в попередніх посібниках, і ми все ще хочемо, щоб вони допомагали краще ізолювати нашу інсталяцію Jenkins. Той, який ми отримуємо з образу Cloudbees, — це каталог jenkins/ref. 
+
+    # Prep Jenkins Directories
+    RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
+    RUN mkdir /var/log/jenkins
+    RUN mkdir /var/cache/jenkins
+    RUN chown -R ${user}:${group} /var/log/jenkins
+    RUN chown -R ${user}:${group} /var/cache/jenkins
+
+Не забудьте змінити посилання на аргументи збірки для користувача та групи тепер, коли ми беремо на себе цю відповідальність. Далі ми покажемо порти, які нам потрібні:
+
+    # Expose Ports for web and slave agents
+    EXPOSE ${http_port}
+    EXPOSE ${agent_port}
+
+Все, що залишилося, це скопіювати службові файли, які Cloudbees містить у своєму образі, встановити користувача Jenkins і запустити команди запуску. Я залишив записи COPY досі згідно з деякими хорошими передовими методами Dockerfile. Вони, ймовірно, зміняться за межами Dockerfile, і якщо вони зміняться, ми не хочемо обов’язково робити недійсним увесь файловий кеш. Ось вони: 
+
+    # Copy in local config files
+    COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
+    COPY jenkins-support /usr/local/bin/jenkins-support
+    COPY plugins.sh /usr/local/bin/plugins.sh
+    COPY jenkins.sh /usr/local/bin/jenkins.sh
+    COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+    RUN chmod +x /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy \
+        && chmod +x /usr/local/bin/jenkins-support \
+        && chmod +x /usr/local/bin/plugins.sh \
+        && chmod +x /usr/local/bin/jenkins.sh \
+        && chmod +x /usr/local/bin/install-plugins.sh
+
+Примітка: поки ми не отримаємо копії цих файлів у наше сховище, вони не працюватимуть, а наш Dockerfile не буде створено. Ми подбаємо про це, коли все перевіримо. Зверніть особливу увагу на те, що я додав команди chmod +x, оскільки це гарантує, що додані файли є виконуваними. Наразі закінчіть установкою користувача Jenkins і точки входу. 
+
+    # Switch to the jenkins user
+    USER ${user}
+
+    # Tini as the entry point to manage zombie processes
+    ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
+
+Давайте протестуємо всі зміни, які ми щойно внесли під час створення Dockerfile. Пам’ятайте, що ми очікуємо помилок, коли ми дійдемо до команд COPY. 
+
+    docker build jenkins-master/
+
+# =============== -6- ===============
+
+#Так виглядає мій файл перед тестуванням, очикуємо помилки)))
+
+    FROM debian:buster
+    LABEL maintainer="out.quito@outlook.com"
+
+    ENV LANG C.UTF-8
+
+    RUN apt-get update \
+        && apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        ca-certificates \
+        zip \
+        openssh-client \
+        unzip \
+        openjdk-11-jdk \
+        ca-certificates-java \
+        && rm -rf /var/lib/apt/lists/*
+
+    RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+
+    ARG user=jenkins
+    ARG group=jenkins
+    ARG uid=1000
+    ARG gid=1000
+    ARG http_port=8080
+    ARG agent_port=50000
+    ARG JENKINS_VERSION=2.440.2
+    ARG TINI_VERSION=v0.19.0
+    ARG JENKINS_SHA=8126628e9e2f8ee2f807d489ec0a6e37fc9f5d6ba84fa8f3718e7f3e2a27312e
+    ARG JENKINS_URL=https://get.jenkins.io/war-stable/2.440.2/jenkins.war
+
+    ENV JENKINS_VERSION ${JENKINS_VERSION}
+    ENV JENKINS_HOME /var/jenkins_home
+    ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
+    ENV JENKINS_UC https://updates.jenkins.io
+    ENV JENKINS_UC_EXPERIMENTAL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
+    ENV JAVA_OPTS="-Xmx8192m"
+    ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log  --webroot=/var/cache/jenkins/war"
+    ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
+
+    RUN curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture) -o /sbin/tini \
+        && chmod +x /sbin/tini
+    RUN groupadd -g ${gid} ${group} \
+        && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+        
+    VOLUME /var/jenkins_home
+
+    RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
+
+    RUN curl -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
+        && echo "${JENKINS_SHA} /usr/share/jenkins/jenkins.war" | sha256sum -c -
+    RUN chown -R ${user} "${JENKINS_HOME}" /usr/share/jenkins/ref
+    RUN mkdir /var/log/jenkins
+    RUN mkdir /var/cache/jenkins
+    RUN chown -R ${user}:${group} /var/log/jenkins 
+    RUN chown -R ${user}:${group} /var/cache/jenkins
+
+    EXPOSE ${http_port}
+    EXPOSE ${agent_port}
+
+    COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
+    COPY jenkins-support /usr/local/bin/jenkins-support
+    COPY plugins.sh /usr/local/bin/plugins.sh
+    COPY jenkins.sh /usr/local/bin/jenkins.sh
+    COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+    RUN chmod +x /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy \
+        && chmod +x /usr/local/bin/jenkins-support \
+        && chmod +x /usr/local/bin/plugins.sh \
+        && chmod +x /usr/local/bin/jenkins.sh \
+        && chmod +x /usr/local/bin/install-plugins.sh
+
+    USER ${user}
+
+    ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
+
+# =============== -6- ===============
