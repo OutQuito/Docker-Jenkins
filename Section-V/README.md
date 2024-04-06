@@ -595,5 +595,61 @@ FROM buildpack-deps:stretch-curl
         ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
         && rm -rf /var/lib/apt/lists/*
 
+#Знову помилка, друга:
+
+    => ERROR [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk="8u212-b  7.8s
+    ------
+    > [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk="8u212-b01-1~deb9u1"     ca-certificates-java="20170531+nmu1"     && rm -rf /var/lib/apt/lists/*:
+    0.618 Get:1 http://deb.debian.org/debian buster InRelease [122 kB]
+    0.841 Get:2 http://deb.debian.org/debian-security buster/updates InRelease [34.8 kB]
+    0.937 Get:3 http://deb.debian.org/debian buster-updates InRelease [56.6 kB]
+    1.036 Get:4 http://deb.debian.org/debian buster/main amd64 Packages [7909 kB]
+    3.632 Get:5 http://deb.debian.org/debian-security buster/updates/main amd64 Packages [592 kB]
+    3.741 Get:6 http://deb.debian.org/debian buster-updates/main amd64 Packages [8788 B]
+    5.013 Fetched 8723 kB in 5s (1856 kB/s)
+    5.013 Reading package lists...
+    5.790 Reading package lists...
+    6.537 Building dependency tree...
+    6.674 Reading state information...
+    6.788 E: Unable to locate package openjdk-8-jdk
+    6.788 E: Version '20170531+nmu1' for 'ca-certificates-java' was not found
+    ------
+    Dockerfile:9
+    --------------------
+    8 |     
+    9 | >>> RUN apt-get update \
+    10 | >>>     && apt-get install -y --no-install-recommends \
+    11 | >>>     wget \
+    12 | >>>     curl \
+    13 | >>>     ca-certificates \
+    14 | >>>     zip \
+    15 | >>>     openssh-client \
+    16 | >>>     unzip \
+    17 | >>>     openjdk-8-jdk="${JAVA_DEBIAN_VERSION}" \
+    18 | >>>     ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
+    19 | >>>     && rm -rf /var/lib/apt/lists/*
+    20 |     
+    --------------------
+    ERROR: failed to solve: process "/bin/sh -c apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk=\"${JAVA_DEBIAN_VERSION}\"     ca-certificates-java=\"${CA_CERTIFICATES_JAVA_VERSION}\"     && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
+
+Ця помилка виникає через те, що пакунок  openjdk-8-jdk відсутній у репозиторіях Debian Buster. Debian Buster за замовчуванням має openjdk-11-jdk, а не openjdk-8-jdk. 
+
+Ось приклад Dockerfile з додаванням репозиторію  contrib для встановлення openjdk-8-jdk:
+
+    FROM debian:buster
+
+    RUN apt-get update \
+        && apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        ca-certificates \
+        zip \
+        openssh-client \
+        unzip \
+        openjdk-11-jdk="${JAVA_DEBIAN_VERSION}" \
+        ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
+        && rm -rf /var/lib/apt/lists/*
+
+У цьому Dockerfile встановлюється openjdk-11-jdk з версією, вказаною у змінній  "JAVA_DEBIAN_VERSION", а також ca-certificates-java з версією, вказаною у змінній "CA_CERTIFICATES_JAVA_VERSION". 
 
 # =============== КІНЕЦЬ ===============
