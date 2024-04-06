@@ -1,4 +1,4 @@
-# DOCKER & JENKINS
+# DOCKER & JENKINS від 
 27.08.2015
 
 https://technology.riotgames.com/news/thinking-inside-container?_gl=1*1mhd0ud*_ga*MjA1OTg5MDYyMy4xNzEwNTI0MTc5*_ga_7VLGVTHBTW*MTcxMjMzNjUzMi4xMS4wLjE3MTIzMzY1MzIuMC4wLjA.
@@ -19,3 +19,30 @@ https://technology.riotgames.com/news/thinking-inside-container?_gl=1*1mhd0ud*_g
 
 РОЗДІЛ VIII - DockerCon Talk і історія 
 
+# Тримайте Docker у чистоті
+
+    docker system df
+
+образи (images) – загальний розмір образів, які були завантажені зі сховищ образів та побудовані у вашій системі
+
+контейнери (containers) – загальний обсяг дискового простору, використовуваний запущеними контейнерами (мається на увазі загальний обсяг верств читання-запису всіх контейнерів)
+
+локальні томи (local volumes) – обсяг локальних сховищ, примонтованих до контейнерів
+
+кеш складання (build cache) – тимчасові файли, згенеровані процесом побудови образів (при використанні інструменту BuildKit, доступного починаючи з Docker версії 18.09)
+
+Видалення контейнерів
+
+    docker container prune
+
+Видалення образів
+
+    docker image prune
+
+Видалення локальних томів
+
+    docker volume prune
+
+Видалення кешу
+
+    docker builder prune

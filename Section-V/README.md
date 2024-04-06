@@ -941,3 +941,9 @@ FROM buildpack-deps:stretch-curl
     ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
 # =============== -6- ===============
+
+    => ERROR [13/18] COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
+    => ERROR [14/18] COPY jenkins-support /usr/local/bin/jenkins-support
+    => ERROR [15/18] COPY plugins.sh /usr/local/bin/plugins.sh
+    => ERROR [16/18] COPY jenkins.sh /usr/local/bin/jenkins.sh
+    => ERROR [17/18] COPY install-plugins.sh /usr/local/bin/install-plugins.sh    
