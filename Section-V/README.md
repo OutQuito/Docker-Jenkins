@@ -137,16 +137,16 @@
 
 2. Dockerfile ARG (аргументи часу збірки) налаштовано для:
 
-    1. user
-    2. group
-    3. uid
-    4. gid
-    5. http_port
-    6. agent_port
-    7. TINI_VERSION
-    8. JENKINS_VERSION
-    9. JENKINS_SHA
-    10. JENKINS_URL
+    1.user
+    2.group
+    3.uid
+    4.gid
+    5.http_port
+    6.agent_port
+    7.TINI_VERSION
+    8.JENKINS_VERSION
+    9.JENKINS_SHA
+    10.JENKINS_URL
 
 3. Зображення використовує Tini , щоб допомогти керувати будь-якими процесами зомбі, що є цікавим доповненням. Ми збережемо це, оскільки для Jenkins необхідний підпроцес.
 
