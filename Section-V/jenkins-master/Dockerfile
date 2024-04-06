@@ -2,9 +2,6 @@ FROM debian:buster
 LABEL maintainer="out.quito@outlook.com"
 
 ENV LANG C.UTF-8
-ENV JAVA_VERSION 8u212
-ENV JAVA_DEBIAN_VERSION 8u212-b01-1~deb9u1
-ENV CA_CERTIFICATES_JAVA_VERSION 20170531+nmu1
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -14,8 +11,8 @@ RUN apt-get update \
     zip \
     openssh-client \
     unzip \
-    openjdk-11-jdk="${JAVA_DEBIAN_VERSION}" \
-    ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
+    openjdk-11-jdk \
+    ca-certificates-java \
     && rm -rf /var/lib/apt/lists/*
 
 RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure

@@ -499,7 +499,7 @@ FROM buildpack-deps:stretch-curl
 
 # =============== ВІДСТУП ===============
 
-#Ось зіткнувся з першою помилкою:
+#ПОМИЛКА №1
 
     => ERROR [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk="8u212-b  2.7s
     ------
@@ -595,7 +595,7 @@ FROM buildpack-deps:stretch-curl
         ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
         && rm -rf /var/lib/apt/lists/*
 
-#Знову помилка, друга:
+#ПОМИЛКА №2
 
     => ERROR [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk="8u212-b  7.8s
     ------
@@ -651,5 +651,76 @@ FROM buildpack-deps:stretch-curl
         && rm -rf /var/lib/apt/lists/*
 
 У цьому Dockerfile встановлюється openjdk-11-jdk з версією, вказаною у змінній  "JAVA_DEBIAN_VERSION", а також ca-certificates-java з версією, вказаною у змінній "CA_CERTIFICATES_JAVA_VERSION". 
+
+#ПОМИЛКА №3
+
+    => ERROR [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-c  12.1s
+    ------                                                                                                                 
+    > [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-11-jdk="8u212-b01-1~deb9u1"     ca-certificates-java="20170531+nmu1"     && rm -rf /var/lib/apt/lists/*:
+    0.640 Get:1 http://deb.debian.org/debian buster InRelease [122 kB]                                                     
+    0.822 Get:2 http://deb.debian.org/debian-security buster/updates InRelease [34.8 kB]                                   
+    0.927 Get:3 http://deb.debian.org/debian buster-updates InRelease [56.6 kB]
+    1.022 Get:4 http://deb.debian.org/debian buster/main amd64 Packages [7909 kB]
+    8.865 Get:5 http://deb.debian.org/debian-security buster/updates/main amd64 Packages [592 kB]
+    9.327 Get:6 http://deb.debian.org/debian buster-updates/main amd64 Packages [8788 B]
+    10.22 Fetched 8723 kB in 10s (891 kB/s)
+    10.22 Reading package lists...
+    10.98 Reading package lists...
+    11.71 Building dependency tree...
+    11.85 Reading state information...
+    11.96 E: Version '8u212-b01-1~deb9u1' for 'openjdk-11-jdk' was not found
+    11.96 E: Version '20170531+nmu1' for 'ca-certificates-java' was not found
+    ------
+    Dockerfile:9
+    --------------------
+    8 |     
+    9 | >>> RUN apt-get update \
+    10 | >>>     && apt-get install -y --no-install-recommends \
+    11 | >>>     wget \
+    12 | >>>     curl \
+    13 | >>>     ca-certificates \
+    14 | >>>     zip \
+    15 | >>>     openssh-client \
+    16 | >>>     unzip \
+    17 | >>>     openjdk-11-jdk="${JAVA_DEBIAN_VERSION}" \
+    18 | >>>     ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
+    19 | >>>     && rm -rf /var/lib/apt/lists/*
+    20 |     
+    --------------------
+    ERROR: failed to solve: process "/bin/sh -c apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-11-jdk=\"${JAVA_DEBIAN_VERSION}\"     ca-certificates-java=\"${CA_CERTIFICATES_JAVA_VERSION}\"     && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
+
+Я намагаєтеся встановити openjdk-11-jdk і ca-certificates-java з версіями, які призначені для Debian 9 (stretch), але я використовую образ Debian Buster. Це призводить до помилки, оскільки не можна знайти вказані версії пакунків у репозиторіях Debian Buster.
+
+Щоб виправити цю помилку, видаляю вказані версії пакунків та просто встановлюю openjdk-11-jdk та ca-certificates-java з репозиторіїв за замовчуванням Debian Buster. Ось оновлений варіант Dockerfile:
+
+    FROM debian:buster
+    LABEL maintainer="out.quito@outlook.com"
+
+    ENV LANG C.UTF-8
+
+    RUN apt-get update \
+        && apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        ca-certificates \
+        zip \
+        openssh-client \
+        unzip \
+        openjdk-11-jdk \
+        ca-certificates-java \
+        && rm -rf /var/lib/apt/lists/*
+
+    RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+    RUN mkdir /var/log/jenkins
+    RUN mkdir /var/cache/jenkins
+    RUN chown -R jenkins:jenkins /var/log/jenkins 
+    RUN chown -R jenkins:jenkins /var/cache/jenkins
+
+    USER jenkins
+
+    ENV JAVA_OPTS="-Xmx8192m"
+    ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war"
+
+У цьому Dockerfile я видалив змінні JAVA_VERSION,  JAVA_DEBIAN_VERSION і CA_CERTIFICATES_JAVA_VERSION, оскільки вони більше не потрібні. Просто встановлюєте пакунки openjdk-11-jdk та ca-certificates-java без вказування конкретних версій, і Docker вибере найновіші версії з репозиторіїв Debian Buster. 
 
 # =============== КІНЕЦЬ ===============
