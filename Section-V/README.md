@@ -360,18 +360,13 @@ FROM buildpack-deps:stretch-curl
 
 3. Цей Dockerfile короткий і приємний. Ми бачимо ще один файл Docker у ланцюжку залежностей під назвою buildpack-deps:stretch-curl. Але крім цього, цей Dockerfile лише встановлює шість речей.
 
-    1.bzr
-
-    2.git
-
-    3.mercurial
-
-    4.openssh-client
-
-    5.subversion
-
-    6.procps
-
+    1. bzr
+    2. git
+    3. mercurial
+    4. openssh-client
+    5. subversion
+    6. procps
+    
 Це має сенс, оскільки він виставляється як образ SCM. Це ще одна можливість зважити, чи хочете ви повторити цю конкретну поведінку чи ні. По-перше, образ Cloudbees Jenkins уже інсталює Git. Якщо вам не потрібні базар, mercurial або subversion або ви не використовуєте їх, можливо, вам не потрібно їх встановлювати, і ви можете заощадити місце у своєму образі. Для повноти, ось весь Dockerfile:
 
     FROM buildpack-deps:stretch-curl
@@ -434,3 +429,171 @@ FROM buildpack-deps:stretch-curl
 # =============== КІНЕЦЬ ===============
 
 Не забувайте: ми обернули образ Дженкінса нашим власним файлом Dockerfile у попередніх уроках, тому нам потрібно пам’ятати це для наступного кроку, а саме створення власного файлу Dockerfile. 
+
+# СТВОРЕННЯ ВЛАСНОГО DOCKERFILE
+
+Завдяки всім дослідженням залежностей ми тепер можемо створити власний Dockerfile. Найпростішим способом було б просто вирізати та вставити все разом і пропустити пропозиції FROM. Це спрацювало б, але також створило б деякі зайві команди та дурниці. Ми можемо оптимізувати розмір зображення, видаливши деякі речі, які нам, можливо, не потрібні. 
+
+Ми підтвердили, що весь ланцюжок зображень створено на основі Debian, і в цьому підручнику я розповім, як контролювати це налаштування. Наприкінці я надам посилання на альтернативу, створену на основі CentOS7, якій я віддаю перевагу через глибоке знайомство з цією ОС завдяки всій роботі, яку ми робимо з нею в Riot. Будь-яка ОС чудова, а потужність Docker полягає в тому, що ви можете вибрати для своїх контейнерів все, що завгодно. 
+
+Отже, давайте почнемо створювати повністю оновлений образ jenkins-master. Для запису, ось файл Docker для jenkins-master, який ми маємо на даний момент (якщо ви дотримувались усіх підручників): 
+#(Нижче наведений приклад мого файлу)
+
+    FROM jenkins/jenkins:lts-jdk17
+    LABEL maintainer="out.quito@outlook.com"
+
+    USER root
+
+    RUN mkdir /var/log/jenkins
+    RUN mkdir /var/cache/jenkins
+    RUN chown -R jenkins:jenkins /var/log/jenkins 
+    RUN chown -R jenkins:jenkins /var/cache/jenkins
+
+    USER jenkins
+
+    ENV JAVA_OPTS="-Xmx8192m"
+    ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war"
+
+Крок перший: давайте змінимо пункт FROM на Debian:
+
+1. Відкрийте файл jenkins-master/Docker
+
+2. Замініть речення from на: FROM debian:stretch.
+
+Наступний крок: ми повинні встановити всі наші програми за допомогою apt-get. Давайте створимо новий розділ у верхній частині Dockerfile після LABEL, але перед розділом USER, і додамо наступне: 
+
+    FROM debian:stretch
+    LABEL maintainer="out.quito@outlook.com"
+
+    ENV LANG C.UTF-8
+    ENV JAVA_VERSION 8u212
+    ENV JAVA_DEBIAN_VERSION 8u212-b01-1~deb9u1
+    ENV CA_CERTIFICATES_JAVA_VERSION 20170531+nmu1
+
+    RUN apt-get update \
+        && apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        ca-certificates \
+        zip \
+        openssh-client \
+        unzip \
+        openjdk-8-jdk="${JAVA_DEBIAN_VERSION}" \
+        ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION} \
+        && rm -rf /var/lib/apt/lists/*
+
+    RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+    RUN mkdir /var/log/jenkins
+    RUN mkdir /var/cache/jenkins
+    RUN chown -R jenkins:jenkins /var/log/jenkins 
+    RUN chown -R jenkins:jenkins /var/cache/jenkins
+
+    USER jenkins
+
+    ENV JAVA_OPTS="-Xmx8192m"
+    ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war"
+
+Це багато речей! Ви помітите, що я об’єднав інсталяції apt-get з усіх файлів Dockerfiles, які ми розглядали, в один набір. Для цього мені довелося спочатку встановити всі необхідні змінні середовища, які використовуються для версій і сертифікатів Java. Я б рекомендував перевірити, чи все встановлюється, перш ніж продовжувати додавати інші матеріали до Dockerfile. 
+
+    docker build jenkins-master/
+
+# =============== ВІДСТУП ===============
+
+#Ось зіткнувся з першою помилкою:
+
+    => ERROR [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk="8u212-b  2.7s
+    ------
+    > [2/7] RUN apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk="8u212-b01-1~deb9u1"     ca-certificates-java="20170531+nmu1"     && rm -rf /var/lib/apt/lists/*:
+    0.492 Ign:1 http://security.debian.org/debian-security stretch/updates InRelease
+    0.530 Ign:2 http://deb.debian.org/debian stretch InRelease
+    0.552 Ign:3 http://security.debian.org/debian-security stretch/updates Release
+    0.594 Ign:4 http://deb.debian.org/debian stretch-updates InRelease
+    0.611 Ign:5 http://security.debian.org/debian-security stretch/updates/main amd64 Packages
+    0.664 Ign:6 http://deb.debian.org/debian stretch Release
+    0.675 Ign:7 http://security.debian.org/debian-security stretch/updates/main all Packages
+    0.736 Ign:8 http://deb.debian.org/debian stretch-updates Release
+    0.736 Ign:5 http://security.debian.org/debian-security stretch/updates/main amd64 Packages
+    0.807 Ign:7 http://security.debian.org/debian-security stretch/updates/main all Packages
+    0.814 Ign:9 http://deb.debian.org/debian stretch/main all Packages
+    0.873 Ign:5 http://security.debian.org/debian-security stretch/updates/main amd64 Packages
+    0.890 Ign:10 http://deb.debian.org/debian stretch/main amd64 Packages
+    0.945 Ign:7 http://security.debian.org/debian-security stretch/updates/main all Packages
+    0.960 Ign:11 http://deb.debian.org/debian stretch-updates/main all Packages
+    1.002 Ign:5 http://security.debian.org/debian-security stretch/updates/main amd64 Packages
+    1.037 Ign:12 http://deb.debian.org/debian stretch-updates/main amd64 Packages
+    1.060 Ign:7 http://security.debian.org/debian-security stretch/updates/main all Packages
+    1.115 Ign:9 http://deb.debian.org/debian stretch/main all Packages
+    1.120 Ign:5 http://security.debian.org/debian-security stretch/updates/main amd64 Packages
+    1.179 Ign:7 http://security.debian.org/debian-security stretch/updates/main all Packages
+    1.198 Ign:10 http://deb.debian.org/debian stretch/main amd64 Packages
+    1.238 Err:5 http://security.debian.org/debian-security stretch/updates/main amd64 Packages
+    1.238   404  Not Found [IP: 151.101.66.132 80]
+    1.281 Ign:11 http://deb.debian.org/debian stretch-updates/main all Packages
+    1.311 Ign:7 http://security.debian.org/debian-security stretch/updates/main all Packages
+    1.356 Ign:12 http://deb.debian.org/debian stretch-updates/main amd64 Packages
+    1.430 Ign:9 http://deb.debian.org/debian stretch/main all Packages
+    1.496 Ign:10 http://deb.debian.org/debian stretch/main amd64 Packages
+    1.563 Ign:11 http://deb.debian.org/debian stretch-updates/main all Packages
+    1.647 Ign:12 http://deb.debian.org/debian stretch-updates/main amd64 Packages
+    1.722 Ign:9 http://deb.debian.org/debian stretch/main all Packages
+    1.787 Ign:10 http://deb.debian.org/debian stretch/main amd64 Packages
+    1.853 Ign:11 http://deb.debian.org/debian stretch-updates/main all Packages
+    1.918 Ign:12 http://deb.debian.org/debian stretch-updates/main amd64 Packages
+    1.992 Ign:9 http://deb.debian.org/debian stretch/main all Packages
+    2.081 Ign:10 http://deb.debian.org/debian stretch/main amd64 Packages
+    2.169 Ign:11 http://deb.debian.org/debian stretch-updates/main all Packages
+    2.264 Ign:12 http://deb.debian.org/debian stretch-updates/main amd64 Packages
+    2.340 Ign:9 http://deb.debian.org/debian stretch/main all Packages
+    2.480 Err:10 http://deb.debian.org/debian stretch/main amd64 Packages
+    2.480   404  Not Found [IP: 199.232.18.132 80]
+    2.548 Ign:11 http://deb.debian.org/debian stretch-updates/main all Packages
+    2.641 Err:12 http://deb.debian.org/debian stretch-updates/main amd64 Packages
+    2.641   404  Not Found [IP: 199.232.18.132 80]
+    2.645 Reading package lists...
+    2.656 W: The repository 'http://security.debian.org/debian-security stretch/updates Release' does not have a Release file.
+    2.656 W: The repository 'http://deb.debian.org/debian stretch Release' does not have a Release file.
+    2.656 W: The repository 'http://deb.debian.org/debian stretch-updates Release' does not have a Release file.
+    2.656 E: Failed to fetch http://security.debian.org/debian-security/dists/stretch/updates/main/binary-amd64/Packages  404  Not Found [IP: 151.101.66.132 80]
+    2.656 E: Failed to fetch http://deb.debian.org/debian/dists/stretch/main/binary-amd64/Packages  404  Not Found [IP: 199.232.18.132 80]
+    2.656 E: Failed to fetch http://deb.debian.org/debian/dists/stretch-updates/main/binary-amd64/Packages  404  Not Found [IP: 199.232.18.132 80]
+    2.656 E: Some index files failed to download. They have been ignored, or old ones used instead.
+    ------
+    Dockerfile:9
+    --------------------
+    8 |     
+    9 | >>> RUN apt-get update \
+    10 | >>>     && apt-get install -y --no-install-recommends \
+    11 | >>>     wget \
+    12 | >>>     curl \
+    13 | >>>     ca-certificates \
+    14 | >>>     zip \
+    15 | >>>     openssh-client \
+    16 | >>>     unzip \
+    17 | >>>     openjdk-8-jdk="${JAVA_DEBIAN_VERSION}" \
+    18 | >>>     ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
+    19 | >>>     && rm -rf /var/lib/apt/lists/*
+    20 |     
+    --------------------
+    ERROR: failed to solve: process "/bin/sh -c apt-get update     && apt-get install -y --no-install-recommends     wget     curl     ca-certificates     zip     openssh-client     unzip     openjdk-8-jdk=\"${JAVA_DEBIAN_VERSION}\"     ca-certificates-java=\"${CA_CERTIFICATES_JAVA_VERSION}\"     && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
+
+Ця помилка виникає через недоступність деяких репозиторіїв. Здається? намагаємся оновити пакунки з репозиторіїв Debian Stretch, але ці репозиторії більше не підтримуються, оскільки Stretch вже вийшов з активної підтримки.
+
+Рекомендується змінити версію Debian на більш нову, таку як Debian Buster або Debian Bullseye, щоб отримати доступ до оновлених репозиторіїв.
+
+Ось приклад Dockerfile з використанням Debian Buster: 
+
+    FROM debian:buster
+
+    RUN apt-get update && apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        ca-certificates \
+        zip \
+        openssh-client \
+        unzip \
+        openjdk-8-jdk="${JAVA_DEBIAN_VERSION}" \
+        ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
+        && rm -rf /var/lib/apt/lists/*
+
+
+# =============== КІНЕЦЬ ===============

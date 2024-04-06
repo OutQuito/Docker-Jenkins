@@ -1,0 +1,30 @@
+FROM debian:buster
+LABEL maintainer="out.quito@outlook.com"
+
+ENV LANG C.UTF-8
+ENV JAVA_VERSION 8u212
+ENV JAVA_DEBIAN_VERSION 8u212-b01-1~deb9u1
+ENV CA_CERTIFICATES_JAVA_VERSION 20170531+nmu1
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    wget \
+    curl \
+    ca-certificates \
+    zip \
+    openssh-client \
+    unzip \
+    openjdk-8-jdk="${JAVA_DEBIAN_VERSION}" \
+    ca-certificates-java="${CA_CERTIFICATES_JAVA_VERSION}" \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+RUN mkdir /var/log/jenkins
+RUN mkdir /var/cache/jenkins
+RUN chown -R jenkins:jenkins /var/log/jenkins 
+RUN chown -R jenkins:jenkins /var/cache/jenkins
+
+USER jenkins
+
+ENV JAVA_OPTS="-Xmx8192m"
+ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war"
