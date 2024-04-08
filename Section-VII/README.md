@@ -138,3 +138,30 @@ sudo – можливо, нам знадобиться підвищити при
     docker build -t testslave jenkins-slave 
 
 Якщо припустити, що все пройшло без помилок, тепер ви готові додати підлеглий пристрій до проекту Docker Compose. 
+
+# =============== -2- ===============
+
+    [+] Building 101.5s (11/11) FINISHED                                            docker:default
+    => [internal] load build definition from Dockerfile
+    => => transferring dockerfile: 544B
+    => [internal] load metadata for docker.io/library/centos:centos7
+    => [internal] load .dockerignore
+    => => transferring context: 2B
+    => CACHED [1/6] FROM docker.io/library/centos:centos7@sha256:be65f488b7764ad3638f236b7b
+    => [internal] load build context
+    => => transferring context: 110B
+    => [2/6] RUN yum update -y &&     yum install -y git wget java-1.8.0-openjdk sudo &&
+    => [3/6] RUN groupadd -g 1000 jenkins     && useradd -d "/home/jenkins" -u 1000 -g 1000
+    => [4/6] RUN chown -R jenkins:jenkins /home/jenkins 
+    => [5/6] RUN echo "jenkins   ALL=(ALL)   ALL" >> /etc/sudors
+    => [6/6] COPY /files/resolv.conf /etc/resolv.conf
+    => exporting to image
+    => => exporting layers
+    => => writing image sha256:a26f4df5e170f7aaf2f0853e749fefae11e1e04238680bc75f584b01e9ca
+    => => naming to docker.io/library/testslave
+
+Тест пройшов УСПІШНО!
+
+# =============== -2- ===============
+
+#СТВОРЕННЯ КОНТЕЙНЕРА DOCKER-PROXY ТА ОНОВЛЕННЯ DOCKER-COMPOSE
