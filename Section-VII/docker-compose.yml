@@ -15,6 +15,17 @@ services:
       - "80:80"
     networks:
       - jenkins-net
+  slave:
+    build: ./jenkins-slave
+  proxy:
+    image: ehazlett/docker-proxy:latest
+    command: -i
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      jenkins-net:
+        aliases:
+          - proxy1
 volumes:
   jenkins-data:
   jenkins-log:
