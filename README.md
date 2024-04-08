@@ -3,7 +3,7 @@
 # DOCKER & JENKINS від RIOT GAMES
 27.08.2015
 
-https://technology.riotgames.com/news/thinking-inside-container?_gl=1*1mhd0ud*_ga*MjA1OTg5MDYyMy4xNzEwNTI0MTc5*_ga_7VLGVTHBTW*MTcxMjMzNjUzMi4xMS4wLjE3MTIzMzY1MzIuMC4wLjA.
+[DOCKER & JENKINS](https://technology.riotgames.com/news/thinking-inside-container?_gl=1*1mhd0ud*_ga*MjA1OTg5MDYyMy4xNzEwNTI0MTc5*_ga_7VLGVTHBTW*MTcxMjMzNjUzMi4xMS4wLjE3MTIzMzY1MzIuMC4wLjA.)
 
 РОЗДІЛ I - Мислення всередині контейнера
 
@@ -15,9 +15,9 @@ https://technology.riotgames.com/news/thinking-inside-container?_gl=1*1mhd0ud*_g
 
 РОЗДІЛ V - Контроль над вашим образом Docker _(ВИКОНАНО)_
 
-РОЗДІЛ VI - Створення за допомогою Jenkins в ефемерному контейнері Docker _(ВИКОНУЄТЬСЯ)_
+РОЗДІЛ VI - Створення за допомогою Jenkins в ефемерному контейнері Docker _(ВИКОНАНО)_
 
-РОЗДІЛ VII - Підручник: Створення за допомогою Дженкінса всередині ефемерного контейнера Docker 
+РОЗДІЛ VII - Підручник: Створення за допомогою Дженкінса всередині ефемерного контейнера Docker _(ВИКОНУЄТЬСЯ)_
 
 РОЗДІЛ VIII - DockerCon Talk і історія 
 
