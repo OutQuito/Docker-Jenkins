@@ -1,4 +1,4 @@
-![Logo](images/logo.png)
+![Logo](JenkinsDocker/images/pngdockerjenkins.png)
 
 # DOCKER & JENKINS від RIOT GAMES
 27.08.2015
