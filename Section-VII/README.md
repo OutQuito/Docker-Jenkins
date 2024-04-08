@@ -283,3 +283,77 @@ sudo – можливо, нам знадобиться підвищити при
         @docker rmi `docker images -q -f "dangling=true"`
     jenkins-log:
         @docker-compose -p jenkins exec master tail -f /var/log/jenkins/jenkins.log
+
+# III. ОНОВИЛЕННЯ ФАЙЛУ DOCKER JENKINS MASTER
+
+З належним чином створеним, перевіреним і доданим докер-компонентним файлом підпорядкованого пристрою нам потрібно внести деякі зміни в докер-файл Jenkins Master. Зокрема, нам потрібно додати дві речі: 
+
+1.Попередньо встановіть плагін Docker і його залежності 
+
+2.Вимкніть майстер запуску Jenkins
+
+# Встановлення плагінів за замовченням
+
+У минулому підручнику я згадав чудову утиліту сценарію оболонки, яку Cloudbees надає у своєму образі Jenkins за замовчуванням, щоб допомогти попередньо завантажити плагіни під час створення нового образу, і ми скористаємося цим тут. 
+
+Ми хочемо встановити плагін Docker, для якого потрібні такі плагіни: 
+
+    jdk-tool
+
+    jclouds-jenkins
+
+    Durable-task
+
+    ssh-slaves
+
+    token-macro
+
+Плагін ssh-slaves сьогодні є частиною стандартної інсталяції Jenkins, але нам потрібно встановити інші чотири. Це легко зробити: 
+
+1.Створіть файл jenkins-master/plugins.txt у вашому улюбленому редакторі 
+
+2. Додайте до нього наступні чотири рядки та збережіть: 
+
+    jdk-tool
+    jclouds-jenkins
+    token-macro
+    durable-task
+    docker-plugin
+
+Все, що зараз потрібно, це помістити цей файл в образ Jenkins і запустити сценарій install-plugins.sh, створений в останньому посібнику. Щоб досягти цього, давайте відредагуємо файл Docker jenkins-master і додамо два нових рядки. 
+
+1.Відредагуйте файл jenkins-master/Docker у своєму улюбленому редакторі 
+
+2.Додайте наступні рядки відразу після розділу «# Копіювати в локальні конфігураційні файли»: 
+
+    # Install default plugins
+    COPY plugins.txt /tmp/plugins.txt
+    RUN /usr/local/bin/install-plugins.sh < /tmp/plugins.txt
+
+    make build 
+
+# =============== -3- ===============
+
+#Виникла помилка те, що скрипт install-plugins.sh більше не підтримується, і ми повинні переключитися на jenkins-plugin-cli. Однак ми використовуєте застарілий спосіб встановлення плагінів у вашому Dockerfile.
+
+Замість використання install-plugins.sh, використовуйте  jenkins-plugin-cli.
+
+1.Видаліть рядок, який містить виклик  install-plugins.sh: 
+
+    RUN /usr/local/bin/install-plugins.sh < /tmp/plugins.txt
+
+2.Замініть його встановленням плагінів за допомогою jenkins-plugin-cli:
+
+    RUN jenkins-plugin-cli --plugin-file /tmp/plugins.txt
+
+3.До файлу jenkins-plugin-cli вносимо такі зміни та зберігаємо його
+
+    jenkins-plugin-cli --plugin-file plugins.txt
+
+
+
+# =============== -3- ===============
+
+    make clean-images 
+
+

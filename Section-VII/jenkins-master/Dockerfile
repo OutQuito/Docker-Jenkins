@@ -37,8 +37,9 @@ ENV JAVA_OPTS="-Xmx8192m"
 ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log  --webroot=/var/cache/jenkins/war"
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
-RUN curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture) -o /sbin/tini \
-    && chmod +x /sbin/tini
+RUN curl -fsSL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/latest/download/jenkins-plugin-manager.jar -o /usr/local/bin/jenkins-plugin-cli && \
+    chmod +x /usr/local/bin/jenkins-plugin-cli
+
 RUN groupadd -g ${gid} ${group} \
     && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
     
@@ -67,6 +68,10 @@ RUN chmod +x /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy \
     && chmod +x /usr/local/bin/plugins.sh \
     && chmod +x /usr/local/bin/jenkins.sh \
     && chmod +x /usr/local/bin/install-plugins.sh
+
+COPY plugins.txt /tmp/plugins.txt
+
+RUN jenkins-plugin-cli --plugin-file /tmp/plugins.txt
 
 USER ${user}
 
