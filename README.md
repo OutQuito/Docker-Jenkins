@@ -1,3 +1,5 @@
+![Logo](images/logo.png)
+
 # DOCKER & JENKINS від RIOT GAMES
 27.08.2015
 
