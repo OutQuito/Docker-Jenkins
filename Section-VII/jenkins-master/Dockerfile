@@ -32,13 +32,13 @@ ENV JENKINS_VERSION ${JENKINS_VERSION}
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
 ENV JENKINS_UC https://updates.jenkins.io
-ENV JENKINS_UC_EXPERIMENTAL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
+ENV JENKINS_UC_EXPERIMENTAL=https://updates.jenkins.io/experimental
 ENV JAVA_OPTS="-Xmx8192m"
 ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log  --webroot=/var/cache/jenkins/war"
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
-RUN curl -fsSL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/latest/download/jenkins-plugin-manager.jar -o /usr/local/bin/jenkins-plugin-cli && \
-    chmod +x /usr/local/bin/jenkins-plugin-cli
+RUN curl -fsSL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.15/jenkins-plugin-manager-2.12.15.jar -o /usr/local/bin/jenkins-plugin-manager-2.12.15.jar && \
+    chmod +x /usr/local/bin/jenkins-plugin-manager-2.12.15.jar
 
 RUN groupadd -g ${gid} ${group} \
     && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
@@ -62,16 +62,18 @@ COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groov
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY jenkins.sh /usr/local/bin/jenkins.sh
-COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+COPY jenkins-plugin-cli /usr/local/bin/jenkins-plugin-cli
+
+
 RUN chmod +x /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy \
     && chmod +x /usr/local/bin/jenkins-support \
     && chmod +x /usr/local/bin/plugins.sh \
     && chmod +x /usr/local/bin/jenkins.sh \
-    && chmod +x /usr/local/bin/install-plugins.sh
+    && chmod +x /usr/local/bin/jenkins-plugin-cli
 
-COPY plugins.txt /tmp/plugins.txt
+COPY plugins.txt /usr/local/bin/plugins.txt
 
-RUN jenkins-plugin-cli --plugin-file /tmp/plugins.txt
+RUN java -jar /usr/local/bin/jenkins-plugin-manager-2.12.15.jar --plugin-file /usr/local/bin/plugins.txt --jenkins-update-center ${JENKINS_UC}
 
 USER ${user}
 
