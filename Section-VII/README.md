@@ -446,6 +446,41 @@ sudo – можливо, нам знадобиться підвищити при
 
 Під час більшості навчальних посібників я залишав увімкненим майстер запуску Jenkins. У цьому останньому підручнику ми перетворюємо наш Jenkins-in-a-box на справжнє тестове налаштування, і ми не хочемо проходити через майстер запуску кожного разу, коли створюємо або ініціалізуємо наш сервер Jenkins. На щастя, cloudbees пропонує перемикач для вимкнення майстра у змінній середовища JAVA_OPTS. Просто пам’ятайте, що це залишає ваш сервер Jenkins у незахищеному стані. Вам слід додати обліковий запис адміністратора або іншу форму автентифікації, якщо ви збираєтеся використовувати цю установку в робочій версії.
 
+Вимкніть майстер запуску, відредагувавши файл Docker jenkins-master: 
+
+1.Знайдіть рядок для ENV JAVA_OPTS= 
+2.Додайте наступний текст після налаштування пам’яті: -Djenkins.install.runSetupWizard=false
+3.Збережіть Dockerfile
+
+Як завжди, я використовую CentOS як основний образ. Дивіться мої попередні публікації в блозі про те, як змінити це на те, що вам зручно, як-от Ubuntu або Debian, як вважаєте за потрібне. 
+
+# Cтворюємо
+
+Усі базові файли оновлено, тому ми готові до створення нового проекту. Давайте зробимо це, щоб переконатися, що у нас є свіжий набір зображень.
+
+    make build (або: docker-compose -p jenkins build)
+
+    створити чисті зображення (або: docker rmi `docker images -q -f "dangling=true"`)
+
+Ви помітите, що під час збірки jenkins-master ми маємо невелику затримку під час встановлення стандартних плагінів jenkins. Це тому, що ми активно завантажуємо файли плагіна під час процесу створення образу.
+
+# IV. НАЛАШТУВАННЯ JENKINS
+
+Ми на останньому етапі. Зі створеними нашими новими образами нам просто потрібно налаштувати плагін Docker у Jenkins, щоб знати, де знаходиться наш Dockerhost на основі Mac/Win, і зіставити наш підлеглий образ збірки з міткою Jenkins. Для цього нам дійсно потрібен запущений Jenkins, тому давайте подбаємо про це. 
+
+    Якщо ваш попередній екземпляр все ще працює, виконайте команду: make clean-data, щоб очистити старі томи та запущені екземпляри
+
+    make run (або: docker-compose -p jenkins up -d nginx data master
+
+    Перейдіть у свій браузер на: http://localhost 
+
+    Завантаження Jenkins може зайняти кілька хвилин 
 
 
+Creating network "jenkins_jenkins-net" with the default driver
+Creating network "jenkins_default" with the default driver
+Creating volume "jenkins_jenkins-data" with default driver
+Creating volume "jenkins_jenkins-log" with default driver
+Pulling proxy (ehazlett/docker-proxy:latest)...
+ERROR: The image for the service you're trying to recreate has been removed. If you continue, volume data could be lost. Consider backing up your data before continuing.
 
