@@ -3,13 +3,11 @@ LABEL maintainer="out.quito@outlook.com"
 
 # Install socat and tini
 RUN yum -y install socat && \
-    yum -y install wget && \
-    wget -O /usr/local/bin/tini-static https://github.com/krallin/tini/releases/download/v0.19.0/tini-static && \
-    chmod +x /usr/local/bin/tini-static && \
+    yum -y install tini && \
     yum clean all
 
 # Set entrypoint with tini
-ENTRYPOINT ["/usr/local/bin/tini-static", "--"]
+ENTRYPOINT ["/usr/local/bin/tini", "--"]
 
 # Continue with your configuration
 VOLUME /var/run/docker.sock

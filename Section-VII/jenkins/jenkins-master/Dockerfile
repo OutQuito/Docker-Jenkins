@@ -74,4 +74,4 @@ RUN java -jar /usr/local/bin/jenkins-plugin-manager-2.12.15.jar --plugin-file /u
 USER ${user}
 
 #Змінено на /usr/local/bin/tini замість /sbin/tin
-ENTRYPOINT ["/usr/local/bin/tini-static", "--", "/usr/local/bin/jenkins.sh"]
+ENTRYPOINT ["/usr/local/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
