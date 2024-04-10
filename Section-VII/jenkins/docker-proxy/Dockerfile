@@ -2,7 +2,8 @@ FROM centos:centos7
 LABEL maintainer="out.quito@outlook.com"
 
 # Install socat and tini
-RUN yum -y install socat && \
+RUN yum -y install epel-release && \
+    yum -y install socat && \
     yum -y install tini && \
     yum clean all
 
