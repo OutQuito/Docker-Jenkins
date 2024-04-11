@@ -1,3 +1,0 @@
-#!/bin/bash
-
-./jenkins-plugin-cli --plugin-file /tmp/plugins.txt

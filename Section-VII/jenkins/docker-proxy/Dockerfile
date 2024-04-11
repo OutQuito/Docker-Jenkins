@@ -1,13 +1,12 @@
-FROM debian:buster
+FROM debian:bullseye
 LABEL maintainer="out.quito@outlook.com"
 
 RUN apt-get update && \
     apt-get install -y socat && \
-    apt-get install -y tini && \
     apt-get install -y procps && \
     apt-get install -y net-tools && \
     apt-get install -y iproute2 && \
-    apt-get clean
+    apt-get install -y tini
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 

@@ -1,18 +1,21 @@
-FROM centos:7
+FROM debian:buster
 LABEL maintainer="out.quito@outlook.com"
 
 ENV LANG C.UTF-8
 
-RUN yum update -y \
-    && yum install -y \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
     wget \
     curl \
     ca-certificates \
     zip \
-    openssh-clients \
+    openssh-client \
     unzip \
-    java-11-openjdk \
-    && yum clean all
+    openjdk-11-jdk \
+    ca-certificates-java \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 ARG user=jenkins
 ARG group=jenkins
@@ -74,4 +77,4 @@ RUN java -jar /usr/local/bin/jenkins-plugin-manager-2.12.15.jar --plugin-file /u
 USER ${user}
 
 #Змінено на /usr/local/bin/tini замість /sbin/tin
-ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+ENTRYPOINT ["/usr/local/bin/tini", "--", "/usr/local/bin/jenkins.sh"]

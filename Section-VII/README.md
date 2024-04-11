@@ -460,7 +460,47 @@ sudo – можливо, нам знадобиться підвищити при
 
     make build (або: docker-compose -p jenkins build)
 
-    створити чисті зображення (або: docker rmi `docker images -q -f "dangling=true"`)
+    створити чисті зображення (або: docker rmi docker images -q -f "dangling=true")
+
+# =============== -4- ===============
+
+Creating network "jenkins_jenkins-net" with the default driver
+Creating network "jenkins_default" with the default driver
+Creating volume "jenkins_jenkins-data" with default driver
+Creating volume "jenkins_jenkins-log" with default driver
+Pulling proxy (ehazlett/docker-proxy:latest)...
+ERROR: The image for the service you're trying to recreate has been removed. If you continue, volume data could be lost. Consider backing up your data before continuing.
+
+#Було змінено Dockerfile директорії docker-proxy
+
+        FROM centos:centos7
+    LABEL maintainer="out.quito@outlook.com"
+
+    # Install socat and tini
+    RUN yum -y install socat && \
+        yum -y install wget && \
+        wget -O /usr/local/bin/tini-static https://github.com/krallin/tini/releases/download/v0.19.0/tini-static && \
+        chmod +x /usr/local/bin/tini-static && \
+        yum clean all
+
+    # Set entrypoint with tini
+    ENTRYPOINT ["/usr/local/bin/tini-static", "--"]
+
+    # Continue with your configuration
+    VOLUME /var/run/docker.sock
+    EXPOSE 2375
+    CMD ["socat", "TCP-LISTEN:2375,reuseaddr,fork","UNIX-CLIENT:/var/run/docker.sock"]
+
+У цьому оновленому Dockerfile я встановив tini та додав його як ініціалізаційний процес у середовище контейнера. Також було змінено ім'я завантаженого файлу з GitHub з tini на tini-static.
+
+#Після проведення безліч спроб запустити контейнери, помилка з tini так і не вирішелась. Спробуємо перейти на dumb-init замість tini.
+
+    ERROR: for jenkins_master_1  Cannot start service master: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "/usr/local/bin/tini": stat /usr/local/bin/tini: no such file or directory: unknown
+
+    ERROR: for master  Cannot start service master: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "/usr/local/bin/tini": stat /usr/local/bin/tini: no such file or directory: unknown
+    ERROR: Encountered errors while bringing up the project.
+
+# =============== -4- ===============
 
 Ви помітите, що під час збірки jenkins-master ми маємо невелику затримку під час встановлення стандартних плагінів jenkins. Це тому, що ми активно завантажуємо файли плагіна під час процесу створення образу.
 
@@ -477,10 +517,5 @@ sudo – можливо, нам знадобиться підвищити при
     Завантаження Jenkins може зайняти кілька хвилин 
 
 
-Creating network "jenkins_jenkins-net" with the default driver
-Creating network "jenkins_default" with the default driver
-Creating volume "jenkins_jenkins-data" with default driver
-Creating volume "jenkins_jenkins-log" with default driver
-Pulling proxy (ehazlett/docker-proxy:latest)...
-ERROR: The image for the service you're trying to recreate has been removed. If you continue, volume data could be lost. Consider backing up your data before continuing.
+
 
