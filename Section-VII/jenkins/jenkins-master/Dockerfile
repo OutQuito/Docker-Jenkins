@@ -24,7 +24,6 @@ ARG gid=1000
 ARG http_port=8080
 ARG agent_port=50000
 ARG JENKINS_VERSION=2.440.2
-ARG TINI_VERSION=v0.19.0
 ARG JENKINS_SHA=8126628e9e2f8ee2f807d489ec0a6e37fc9f5d6ba84fa8f3718e7f3e2a27312e
 ARG JENKINS_URL=https://get.jenkins.io/war-stable/2.440.2/jenkins.war
 
@@ -76,5 +75,4 @@ RUN java -jar /usr/local/bin/jenkins-plugin-manager-2.12.15.jar --plugin-file /u
 
 USER ${user}
 
-#Змінено на /usr/local/bin/tini замість /sbin/tin
-ENTRYPOINT ["/usr/local/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--", "/usr/local/bin/jenkins.sh"]
