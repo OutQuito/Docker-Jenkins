@@ -48,3 +48,7 @@
 Видалення кешу
 
     docker builder prune
+
+Повністю очистити кеш Docker
+
+    docker system prune -a
