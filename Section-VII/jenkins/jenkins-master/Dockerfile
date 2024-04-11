@@ -36,6 +36,9 @@ ENV JAVA_OPTS="-Xmx8192m -Djenkins.install.runSetupWizard=false"
 ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log  --webroot=/var/cache/jenkins/war"
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
+RUN curl -fsSL https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 -o /usr/local/bin/dumb-init && \
+    chmod +x /usr/local/bin/dumb-init
+
 RUN curl -fsSL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.15/jenkins-plugin-manager-2.12.15.jar -o /usr/local/bin/jenkins-plugin-manager-2.12.15.jar && \
     chmod +x /usr/local/bin/jenkins-plugin-manager-2.12.15.jar
 
