@@ -14,7 +14,6 @@ RUN apt-get update \
     openjdk-11-jdk \
     ca-certificates-java \
     && rm -rf /var/lib/apt/lists/*
-
 RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 ARG user=jenkins
@@ -38,17 +37,14 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 RUN curl -fsSL https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 -o /usr/local/bin/dumb-init && \
     chmod +x /usr/local/bin/dumb-init
-
 RUN curl -fsSL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.15/jenkins-plugin-manager-2.12.15.jar -o /usr/local/bin/jenkins-plugin-manager-2.12.15.jar && \
     chmod +x /usr/local/bin/jenkins-plugin-manager-2.12.15.jar
-
 RUN groupadd -g ${gid} ${group} \
     && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
     
 VOLUME /var/jenkins_home
 
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
-
 RUN curl -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
     && echo "${JENKINS_SHA} /usr/share/jenkins/jenkins.war" | sha256sum -c -
 RUN chown -R ${user} "${JENKINS_HOME}" /usr/share/jenkins/ref

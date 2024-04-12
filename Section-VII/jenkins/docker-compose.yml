@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   master:
     build: ./jenkins-master
@@ -19,13 +19,12 @@ services:
     build: ./jenkins-slave
   proxy:
     build: ./docker-proxy
-    command: -i
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       jenkins-net:
         aliases:
-          - proxy1
+          - proxy1    
 volumes:
   jenkins-data:
   jenkins-log:
