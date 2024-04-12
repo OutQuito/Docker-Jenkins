@@ -500,6 +500,37 @@ ERROR: The image for the service you're trying to recreate has been removed. If 
     ERROR: for master  Cannot start service master: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "/usr/local/bin/tini": stat /usr/local/bin/tini: no such file or directory: unknown
     ERROR: Encountered errors while bringing up the project.
 
+#Похибку було усунуто, завдяки людському фактору. Частина коду від Dockerfile /jenkins-master була випадково перевіщена до Dockerfile /docer-proxy.
+
+Dockerfile /jenkins-master:
+
+    .....
+    ENV JENKINS_OPTS="--logfile=/var/log/jenkins/jenkins.log  --webroot=/var/cache/jenkins/war"
+    ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
+
+    RUN curl -fsSL https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 -o /usr/local/bin/dumb-init && \
+        chmod +x /usr/local/bin/dumb-init
+
+    RUN curl -fsSL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.15/jenkins-plugin-manager-2.12.15.jar -o /usr/local/bin/jenkins-plugin-manager-2.12.15.jar && \
+        chmod +x /usr/local/bin/jenkins-plugin-manager-2.12.15.jar
+    .....
+
+Dockerfile /docker-proxy:
+
+    FROM centos:centos7
+    LABEL maintainer="mstewart@riotgames.com"
+
+    RUN yum -y install socat && \
+        yum clean all
+
+    VOLUME /var/run/docker.sock
+
+    EXPOSE 2375
+
+    ENTRYPOINT ["socat", "TCP-LISTEN:2375,reuseaddr,fork","UNIX-CLIENT:/var/run/docker.sock"]
+
+Ось всі зміний...
+
 # =============== -4- ===============
 
 Ви помітите, що під час збірки jenkins-master ми маємо невелику затримку під час встановлення стандартних плагінів jenkins. Це тому, що ми активно завантажуємо файли плагіна під час процесу створення образу.
@@ -516,6 +547,46 @@ ERROR: The image for the service you're trying to recreate has been removed. If 
 
     Завантаження Jenkins може зайняти кілька хвилин 
 
+Перш ніж продовжити, я хочу коротко розповісти про Дженкінса. У Дженкінса є концепція «вузла побудови» та «завдання». Вузли збірки мають N виконавців. Коли Jenkins хоче запустити завдання, він намагається знайти запасного виконавця (на вузлі збірки), щоб виконати це завдання. Стандартна установка Jenkins намагатиметься знайти будь-який резервний виконавець для запуску. Незважаючи на те, що це просто, більшість установників Jenkins змінюють це, тому що вони хочуть, щоб певні завдання запускалися на певних типах вузлів збірки (уявіть, що вам потрібна операційна система Windows, а не операційна система Linux). Для цього «мітки» застосовуються до вузлів побудови, а завдання обмежуються виконанням лише на вузлах побудови з відповідними мітками. 
 
+Для наших ефемерних підлеглих Docker ми збираємося використовувати цю можливість міток, щоб прив’язувати зображення та завдання Docker до цих міток. Завдяки чудовому дизайну плагіна JClouds і плагіна Docker Jenkins перевіряє мітку завдання, коли воно потрапляє в чергу. Плагін переконається, що для завдання немає доступних виконавців, і тому спробує створити вузол збірки з відповідним образом Docker. Новому вузлу буде присвоєно правильну мітку, і завдання збирання в черзі буде запущено. 
 
+Це, по суті, майже як магія! Така поведінка є ключем до того, як працюють ефемерні вузли. 
 
+Тепер ми готові налаштувати наш Dockerhost і перший ефемерний підлеглий сервер на Jenkins. На цільовій сторінці Jenkins виконайте такі дії: 
+
+    Натисніть «Керувати Jenkins».
+
+    Натисніть «Налаштувати систему».
+
+    Прокрутіть униз, доки не знайдете Додати нову хмару як спадне меню (це надходить із плагіна Jclouds)
+
+    Виберіть Docker зі спадного меню
+
+З’являється нова форма. Ця форма є високорівневою інформацією, яку потрібно ввести про ваш Dockerhost. Зауважте, що ви можете створити багато за бажанням хостів Docker. Це один із способів керування образами збірок, які запускаються на яких машинах. Для цього підручника ми зупинимося на одному. 
+
+    У полі Ім’я введіть «LocalDockerHost»
+
+    У полі Docker Host URI введіть: "tcp://proxy1:2375"
+
+# =============== -5- ===============
+
+#Після запуску контейнерів виявилося що jenkins_proxy дав помилку:
+
+    socat[1] E exactly 2 addresses required (there are 3); use option "-h" for help
+
+    FROM centos:centos7
+    LABEL maintainer="mstewart@riotgames.com"
+
+    RUN yum -y install socat && \
+        yum clean all
+
+    VOLUME /var/run/docker.sock
+
+    EXPOSE 2375
+
+    ENTRYPOINT ["socat", "TCP-LISTEN:2375,reuseaddr,fork", "UNIX-CONNECT:/var/run/docker.sock"]
+
+У цьому варіанті ми видалили адресу TCP з параметра  TCP-LISTEN та змінили параметр  UNIX-CLIENT на  UNIX-CONNECT, щоб відповідати адресі Unix-сокета. Тепер  socat має правильну кількість адрес, та помилка має би бути усунена.
+
+# =============== -5- ===============
